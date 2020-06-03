@@ -20,6 +20,7 @@
       <b-button variant="success" type="submit" v-if="newAcc" @click="createAcc">Create Account</b-button>
       <b-button variant="success" type="submit" v-else>Login</b-button>
       <b-button  class="ml-2" @click="toggleConfirm">or create account</b-button>
+      <b-button class="ml-2" @click="forgotPassword" variant="error">Forgot your password</b-button>
     </form>
   </div>
 </template>
@@ -36,6 +37,7 @@
         newAcc: false,
         password: "",
         confirmPassword: "",
+        failedAttempt: false,
       }
     },
 
@@ -44,15 +46,19 @@
         firebase.auth().signInWithEmailAndPassword(this.email, this.password)
         .catch(error => {
           alert(error);
+          this.failedAttempt = true;
         })
       },
 
       createAcc(){
         if (this.password === this.confirmPassword){
           firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-          .catch(error => {
-            alert (error);
-          })
+            .then(() => {
+              firebase.auth().currentUser.sendEmailVerification()
+            })
+            .catch(error => {
+              alert (error);
+            })
         } else {
           alert ("passwords do not match")
         }
@@ -60,6 +66,16 @@
 
       toggleConfirm(){
         this.newAcc = !this.newAcc
+      },
+
+      forgotPassword(){
+        firebase.auth().sendPasswordResetEmail(this.email)
+          .then(() => {
+            alert("Password reset email sent")
+          })
+          .catch(error => {
+            alert(error);
+          })
       }
     }
   }
