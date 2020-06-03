@@ -1,20 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Upload from "@/views/Upload";
+import Blueprints from "@/views/Blueprints";
 
 Vue.use(VueRouter)
 
   const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home,
-  },
-  {
     path: '/upload',
     name: "Upload",
     component: Upload,
+  },
+  {
+    path: '/',
+    name: 'Blueprints',
+    component: Blueprints,
   }
 ]
 
